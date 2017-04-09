@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">FotoMap</string>
+    <string name="title_activity_maps">FotoMap</string>
+
+    <string name="title_activity_photo">PhotoActivity</string>
+    <string name="dummy_button">Take Picture</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
