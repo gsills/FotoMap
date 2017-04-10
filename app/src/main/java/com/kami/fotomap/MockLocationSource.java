@@ -18,6 +18,8 @@ public class MockLocationSource implements LocationSource {
     private static final double DELTA_LAT = 0.05;
     private static final double DELTA_LON = 0.05;
 
+    // UPDATE_PERIOD is used at regular intervals, defined by seconds, so that the location can be updated to generate a new point.
+    // The listener (MapsActivity) will therefore be notified of this new point (new location generated).
     private static final long UPDATE_PERIOD = TimeUnit.SECONDS.toMillis(5);
 
     private final Handler handler = new Handler();
@@ -30,6 +32,7 @@ public class MockLocationSource implements LocationSource {
         this.currentLocation = currentLocation;
         this.updatePeriod = updatePeriod;
         if(currentLocation != null) {
+            // The Service starting position begins in the center of the map mock location source
             center = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         }
         lastCoordinate = center;
@@ -69,6 +72,7 @@ public class MockLocationSource implements LocationSource {
     private double scaleOffset(double value) {
         return (randomizer.nextDouble() - 0.5) * value;
     }
+
 
     @Override
     public void activate(OnLocationChangedListener locationChangedListener) {

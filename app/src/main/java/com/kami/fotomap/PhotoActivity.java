@@ -48,7 +48,7 @@ public class PhotoActivity extends AppCompatActivity {
      * and a change of the status and navigation bar.
      */
     private static final int UI_ANIMATION_DELAY = 300;
-    public static final String EXTRA_PHOTO_URL = "photUrl";
+    public static final String EXTRA_PHOTO_URL = "photoURL";
     private static final String TAG = "PhotoActivity";
     private final Handler mHideHandler = new Handler();
     private final Runnable mHidePart2Runnable = new Runnable() {
@@ -91,6 +91,8 @@ public class PhotoActivity extends AppCompatActivity {
             return false;
         }
     };
+
+    // The image view is used to show the photo that was just taken
     private ImageView mImageView;
 
     @Override
@@ -176,6 +178,11 @@ public class PhotoActivity extends AppCompatActivity {
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
 
+    // ---------------------------------------------TAKING THE PICTURE---------------------------------------------------
+    // The Android way of delegating actions to other applications is to invoke an Intent that describes what you want done.
+    // This process involves three pieces: The Intent itself, a call to start the external Activity,
+    // and some code to handle the image data when focus returns to your activity.
+    // Here's a function that invokes an intent to capture a photo.
     static final int REQUEST_TAKE_PHOTO = 1;
 
     private void dispatchTakePictureIntent() {
@@ -201,12 +208,21 @@ public class PhotoActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    /* When the user is done with the subsequent activity and returns, the system calls your activity's onActivityResult() method.
+    This method includes three arguments:
+    1) The request code you passed to startActivityForResult().
+    2) A result code specified by the second activity. This is either RESULT_OK if the operation was successful or RESULT_CANCELED
+       if the user backed out or the operation failed for some reason.
+    3) An Intent that carries the result data.*/
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             galleryAddPic();
-            setPic();
+            setPic(); //set the picture in the UI
             Intent result = new Intent();
+            // EXTRA_PHOTO_URL parameter is a keyed value & is just a string for identifying the photo URL
+            // mCurrentPhotoPath is made up of the composition of the createImageFile() method
             result.putExtra(EXTRA_PHOTO_URL, mCurrentPhotoPath);
             setResult(RESULT_OK, result);
         }
@@ -244,6 +260,10 @@ public class PhotoActivity extends AppCompatActivity {
         }
     }
 
+    /* Once you decide the directory for the file, you need to create a collision-resistant file name.
+       You may wish also to save the path in a member variable for later use.
+       Here's an example solution in a method that returns a unique file name for a new photo using a date-time stamp: */
+
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -260,6 +280,11 @@ public class PhotoActivity extends AppCompatActivity {
         return image;
     }
 
+
+    /*  The easiest way to make your photo accessible is to make it accessible from the system's Media Provider.
+        The following example method demonstrates how to invoke the system's media scanner to add your photo
+        to the Media Provider's database, making it available in the Android Gallery application and to other apps. */
+
     private void galleryAddPic() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File f = new File(mCurrentPhotoPath);
@@ -267,6 +292,13 @@ public class PhotoActivity extends AppCompatActivity {
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);
     }
+
+
+    // Decode a Scaled Image
+    /* Managing multiple full-sized images can be tricky with limited memory. If you find your application running out of memory
+     after displaying just a few images, you can dramatically reduce the amount of dynamic heap used by expanding the JPEG
+     into a memory array that's already scaled to match the size of the destination view. The following example method
+     demonstrates this technique. */
 
     private void setPic() {
         // Get the dimensions of the View

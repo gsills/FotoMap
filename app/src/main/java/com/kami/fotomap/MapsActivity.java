@@ -79,8 +79,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         updateValuesFromBundle(savedInstanceState);
 
+
         Button takePhotoButton = (Button) findViewById(R.id.takeAPhoto);
 
+        // The onClick listener on the takePhotoButton will create an intent which hands over to the PhotoActivity class
         takePhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,6 +135,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == TAKE_A_PHOTO) {
             if (resultCode == RESULT_OK) {
+                // gets the URL of the photo from the result of PhotoActivity & stores it in mCurrentPhotoPath
                 mCurrentPhotoPath = data.getStringExtra(PhotoActivity.EXTRA_PHOTO_URL);
                 updateMapUI("Photo");
             }
@@ -188,6 +191,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             marker.setTag(new LocationMarkerInfo(locationTitle, latLng));
         }
 
+        // This code moves the map to where the last map location is
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
                 .target(latLng)
                 .zoom(13)   // City
@@ -318,6 +322,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    // When an onLocationChanged event occurs, the updateMapUI is updated with a marker with a tag,
+    // and adds a line between that new location and the current location
     @Override
     public void onLocationChanged(Location location) {
         Log.d(MapsActivity.TAG, "Potential location change...");
