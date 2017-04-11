@@ -165,6 +165,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         mMap.setMyLocationEnabled(true);
+        // Customize what shows up in the info window
         mMap.setInfoWindowAdapter(this);
     }
 
@@ -336,6 +337,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    // This method contains all the info to build the info view
     private View prepareInfoView(Marker marker) {
         Object o = marker.getTag();
 
