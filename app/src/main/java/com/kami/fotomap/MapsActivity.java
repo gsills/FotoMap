@@ -61,6 +61,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mLocationRequest = LocationRequest.create();
     }
 
+    private View mRootView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +81,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         updateValuesFromBundle(savedInstanceState);
 
-
         Button takePhotoButton = (Button) findViewById(R.id.takeAPhoto);
 
         // The onClick listener on the takePhotoButton will create an intent which hands over to the PhotoActivity class
@@ -92,6 +93,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
     }
+
+
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
