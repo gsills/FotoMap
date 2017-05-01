@@ -47,7 +47,7 @@ public class PhotoActivity extends AppCompatActivity {
      * Some older devices needs a small delay between UI widget updates
      * and a change of the status and navigation bar.
      */
-    private static final int UI_ANIMATION_DELAY = 100;
+    private static final int UI_ANIMATION_DELAY = 0; //100
     public static final String EXTRA_PHOTO_URL = "photoURL";
     private static final String TAG = "PhotoActivity";
     private final Handler mHideHandler = new Handler();
@@ -74,7 +74,7 @@ public class PhotoActivity extends AppCompatActivity {
     private final Runnable mHideRunnable = new Runnable() {
         @Override
         public void run() {
-            hide();
+           // hide();
         }
     };
     /**
